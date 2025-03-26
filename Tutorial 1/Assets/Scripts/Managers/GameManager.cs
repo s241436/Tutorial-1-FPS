@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
 
             player.SetActive(true);
             worldCamera.gameObject.SetActive(false);
+            messageText.gameObject.SetActive(false);
         }
     }
 
