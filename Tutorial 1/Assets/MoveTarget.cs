@@ -1,43 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class VectorLerp : MonoBehaviour
 {
     [SerializeField] int speed;
-    [SerializeField] GameObject point1;
-    [SerializeField] GameObject point2;
 
-    int posIndex = 0;
-    int length;
+    [SerializeField] float trigger_distance = 0;
+    bool triggered = false;
 
     GameObject targetPoint;
     [SerializeField] GameObject transformObject;
 
+    GameObject player;
+
+    [SerializeField] GameObject[] waypoints;
+    int currentWaypointIndex = 0;
+
     private void Start()
     {
-        targetPoint = point1;
+        player = GameObject.FindWithTag("Player");
     }
 
     private void Update()
     {
 
         
-        transformObject.transform.position = Vector3.Lerp(transformObject.transform.position, targetPoint.transform.position, speed * Time.deltaTime);
-
-        if ((transformObject.transform.position - targetPoint.transform.position).magnitude <= 0.01f)
+        if ((transformObject.transform.position.magnitude - player.transform.position.magnitude) < trigger_distance)
         {
-            if (targetPoint == point1)
+            triggered = true;
+        }
+        else if (trigger_distance == 0)
+        {
+            triggered = true;
+        }
+
+        if (triggered == true)
+        {
+            Debug.Log("Triggered");
+            movetarget();
+        }
+
+
+     
+
+    }
+
+    private void movetarget()
+    {
+        if (Vector3.Distance(transformObject.transform.position, waypoints[currentWaypointIndex].transform.position) < .1f)
+        {
+            // Increase waypoint index
+            currentWaypointIndex++;
+            // resets the loop
+            if (currentWaypointIndex >= waypoints.Length)
             {
-                targetPoint = point2;
-            }
-            else
-            {
-                targetPoint = point1;
+                currentWaypointIndex = 0;
             }
         }
+
+        transformObject.transform.position = Vector3.Lerp(transformObject.transform.position, waypoints[currentWaypointIndex].transform.position, speed * Time.deltaTime);
+
     }
+
+   
+
+
 
 
 

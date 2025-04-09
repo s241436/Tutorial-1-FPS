@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Unity.VisualScripting;
+using System;
 
 public class HighScores : MonoBehaviour
 {
@@ -28,7 +29,15 @@ public class HighScores : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.F9))
+        {
+            LoadScoresFromFile();
+        }
+        else if (Input.GetKeyDown(KeyCode.F10))
+        {
+            SaveScoresToFile();
+        }
+           
     }
 
     public void LoadScoresFromFile()
@@ -47,6 +56,7 @@ public class HighScores : MonoBehaviour
             return;
         }
 
+       
         // Make a new array of default values. This ensures that
         // no old values stick around if we've loaded a scores file
         // in the past.
@@ -56,6 +66,16 @@ public class HighScores : MonoBehaviour
         // which we give our full file path to. Don't forget the directory
         // separator between the directory and the filename!
         StreamReader fileReader = new StreamReader(currentDirectory + "\\" + scoreFileName);
+
+        try
+        {
+            fileReader = new StreamReader(currentDirectory + "\\" + scoreFileName);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+            return;
+        }
 
         // A counter to make sure we don't go past the end of our scores
         int scoreCount = 0;

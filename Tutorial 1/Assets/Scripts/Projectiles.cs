@@ -19,8 +19,6 @@ public class Projectiles : MonoBehaviour
     {
         TargetHealth targetHit = null;
 
-        Debug.Log("wtf did I just hit: " + collision.gameObject.name);
-
         if (collision != null)
         {
              targetHit = collision.gameObject.GetComponent<TargetHealth>();
